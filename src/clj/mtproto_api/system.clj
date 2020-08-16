@@ -13,11 +13,12 @@
             [ring.middleware.proxy-headers :refer [wrap-forwarded-remote-addr]]
             [muuntaja.middleware :refer [wrap-params wrap-format]]
             [om-flash-bootstrap.core :refer [wrap-message]]
-            [mtproto-api.handler :refer [ring-handler]]))
+            [mtproto-api.handler :refer [ring-handler wrap-debug]]))
 
 
 (defsystem base
   [:middleware (new-middleware {:middleware [[wrap-not-found "<html>Not Found</html>"]
+                                             wrap-debug
                                              [wrap-defaults api-defaults]
                                              wrap-forwarded-remote-addr]})
    :app-middleware (component/using (new-middleware {:middleware [wrap-params
@@ -27,7 +28,9 @@
    :app-endpoint (component/using (new-endpoint ring-handler) [:app-middleware])
    :handler (component/using (new-handler) [:app-endpoint                                         
                                             :middleware])
-   :http (component/using (new-immutant-web :port (Integer. ^String (System/getProperty "http.port"))) [:handler])])
+   :http (component/using (new-immutant-web :port (Integer. ^String (System/getProperty "http.port"))
+                                            :options {:path "/api"
+                                                      :host (System/getProperty "http.host")}) [:handler])]) 
 
 (defn prod
   "Assembles and returns components for a production deployment"

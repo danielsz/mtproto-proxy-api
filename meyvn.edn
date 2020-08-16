@@ -4,8 +4,8 @@
        :name "mtproto-api"},
  :packaging {:uberjar {:enabled true,
                        :build-properties {:main-class "mtproto-api.core"},
-                       :remote-repository {:id "ssh-repository",
-                                           :url "scpexe://user@domain:/home/.m2/repository"},
+                       :remote-repository {:id "ssh-repository"
+                                           :url "scpexe://danielsz@reuben.tuppu.net:/home/danielsz/.m2/repository"},
                        :excludes {:artifacts ["org.clojure:google-closure-library"],
                                   :filters ["META-INF/*.MF" "META-INF/*.SF" "META-INF/*.DSA" "META-INF/*.RSA"]}
                        :include-source false,
@@ -73,7 +73,9 @@
                                   :aot-cache true,
                                   :infer-externs true}}},
  :profiles {:enabled true
-            :development {:http-port "3285"}
+            :development {:http-port "3285"
+                          :http-host "10.0.88.2"}
             :production {:http-port "8057"
+                         :http-host "10.0.88.1"
                          :repl-port "8058"
                          :repl-ip "127.0.0.1"}}}
