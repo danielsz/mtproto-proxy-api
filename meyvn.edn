@@ -3,7 +3,7 @@
        :version "0.1.0",
        :name "mtproto-api"},
  :packaging {:uberjar {:enabled true,
-                       :build-properties {:main-class "mtproto-api.core"},
+                       :build-properties {:main-class "mtproto_api.core"},
                        :remote-repository {:id "ssh-repository"
                                            :url "scpexe://danielsz@reuben.tuppu.net:/home/danielsz/.m2/repository"},
                        :excludes {:artifacts ["org.clojure:google-closure-library"],

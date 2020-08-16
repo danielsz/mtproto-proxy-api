@@ -18,7 +18,6 @@
 
 (defsystem base
   [:middleware (new-middleware {:middleware [[wrap-not-found "<html>Not Found</html>"]
-                                             wrap-debug
                                              [wrap-defaults api-defaults]
                                              wrap-forwarded-remote-addr]})
    :app-middleware (component/using (new-middleware {:middleware [wrap-params

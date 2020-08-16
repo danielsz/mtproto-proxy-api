@@ -1,5 +1,6 @@
 {:paths ["src/clj"]
  :deps {org.danielsz/ring-utils {:mvn/version "0.1.7"}
+        org.danielsz/jvm-utils {:mvn/version "0.1.2"}
         ring/ring {:mvn/version "1.8.0"}
         org.clojure/core.match {:mvn/version "1.0.0"}
         ring/ring-defaults {:mvn/version "0.3.2"}
