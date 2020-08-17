@@ -1,1 +1,26 @@
-Front-end for https://github.com/seriyps/mtproto_proxy
+* Front-end for Erlang mtproto proxy
+
+** Original project
+https://github.com/seriyps/mtproto_proxy
+** API
+
+Get number of connections 
+#+begin_src shell
+  curl -v http://server:port/api/connections
+#+end_src
+
+Add tls domain
+
+#+begin_src shell
+  curl -v -X PUT -d 'domain=abc.gmail.com' http://server:port/api/add
+#+end_src
+
+Check if tls domain exists (doesn't work upstream)
+#+begin_src shell
+  curl -v -X GET -d 'domain=abc.gmail.com' http://server:port/api/exists
+#+end_src
+
+Delete tls domain
+#+begin_src shell
+  curl -v -X DELETE -d 'domain=abc.gmail.com' http://server:port/api/delete
+#+end_src

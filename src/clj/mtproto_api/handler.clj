@@ -1,24 +1,36 @@
 (ns mtproto-api.handler
   (:require [reitit.ring :as r]
-            [clojure.tools.logging :as log]))
+            [ring.util.response :refer [response content-type status]]
+            [clojure.tools.logging :as log])
+  (:import [clojure.lang ExceptionInfo]))
 
 
 (defn mtproto-api [arg]
   (let [pb (ProcessBuilder. ["/opt/mtp_proxy/bin/mtp_proxy" "eval" arg])
         process (.start pb)
-        rc (.waitFor process)]
+        rc (.waitFor process)
+        rv (-> (.getInputStream process)
+              slurp)]
     (if (= rc 0)
-      (-> (.getInputStream process)
-         slurp)
-      (throw (Exception. "there was an error while executing command")))))
+      rv
+      (throw (ex-info "Error" {:output rv})))))
 
+(defn api [command]
+  (try (let [x (mtproto-api command)]
+         (-> (response x)
+            (content-type  "text/plain")))
+       (catch ExceptionInfo e (-> (response (:output (ex-data e)))
+                                 (status 400)
+                                 (content-type  "text/plain")))))
 
 (defn ring-handler [_]
   (r/ring-handler
    (r/router
     [["/api/connections" {:get (fn [_]
-                                 {:status 200
-                                  :headers {"Content-Type" "text/plain"}
-                                  :body (mtproto-api "'lists:sum([proplists:get_value(all_connections, L) || {_, L} <- ranch:info()]).'")})}]])
-   (r/routes
-    (r/create-resource-handler {:path "/" :root ""}))))
+                                 (api "lists:sum([proplists:get_value(all_connections, L) || {_, L} <- ranch:info()])."))}]
+     ["/api/add" {:put (fn [{{:keys [domain]} :params}]
+                         (api (str "mtp_policy_table:add(customer_domains, tls_domain, \"" domain "\").")))}]
+     ["/api/delete" {:delete (fn [{{:keys [domain]} :params}]
+                               (api (str "mtp_policy_table:del(customer_domains, tls_domain, \"" domain "\").")))}]
+     ["/api/exists" {:get (fn [{{:keys [domain]} :params}]
+                            (api (str "mtp_policy_table:exists(customer_domains, \"" domain "\").")))}]])))

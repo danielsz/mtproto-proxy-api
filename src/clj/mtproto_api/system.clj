@@ -13,7 +13,7 @@
             [ring.middleware.proxy-headers :refer [wrap-forwarded-remote-addr]]
             [muuntaja.middleware :refer [wrap-params wrap-format]]
             [om-flash-bootstrap.core :refer [wrap-message]]
-            [mtproto-api.handler :refer [ring-handler wrap-debug]]))
+            [mtproto-api.handler :refer [ring-handler]]))
 
 
 (defsystem base
