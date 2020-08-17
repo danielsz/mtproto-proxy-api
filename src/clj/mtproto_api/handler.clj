@@ -33,4 +33,4 @@
      ["/api/delete" {:delete (fn [{{:keys [domain]} :params}]
                                (api (str "mtp_policy_table:del(customer_domains, tls_domain, \"" domain "\").")))}]
      ["/api/exists" {:get (fn [{{:keys [domain]} :params}]
-                            (api (str "mtp_policy_table:exists(customer_domains, \"" domain "\").")))}]])))
+                            (api (str "mtp_policy_table:exists(customer_domains, mtp_policy:convert(tls_domain, \""  domain  "\")).")))}]])))

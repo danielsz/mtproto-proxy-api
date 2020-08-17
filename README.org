@@ -15,7 +15,7 @@ Add tls domain
   curl -v -X PUT -d 'domain=abc.gmail.com' http://server:port/api/add
 #+end_src
 
-Check if tls domain exists (doesn't work upstream)
+Check if tls domain exists
 #+begin_src shell
   curl -v -X GET -d 'domain=abc.gmail.com' http://server:port/api/exists
 #+end_src
